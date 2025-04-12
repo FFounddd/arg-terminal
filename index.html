@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ACCESS CORE</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
+    body {
+      margin: 0;
+      background-color: #000;
+      color: #39ff14;
+      font-family: 'VT323', monospace;
+      font-size: 20px;
+      line-height: 1.6;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .terminal {
+      width: 80vw;
+      max-width: 800px;
+      padding: 40px;
+      background: rgba(0, 0, 0, 0.85);
+      border: 2px solid #39ff14;
+      box-shadow: 0 0 30px #39ff14;
+      position: relative;
+    }
+
+    .terminal::after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: repeating-linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.1),
+        rgba(0, 0, 0, 0.1) 2px,
+        transparent 2px,
+        transparent 4px
+      );
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .cursor {
+      display: inline-block;
+      width: 10px;
+      background-color: #39ff14;
+      animation: blink 1s steps(2, start) infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    .menu-item {
+      color: #39ff14;
+      text-decoration: none;
+      display: block;
+      margin: 10px 0;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+
+    .menu-item:hover {
+      color: #fff;
+      text-shadow: 0 0 5px #39ff14;
+      transform: scale(1.03);
+    }
+
+    .glitch-text {
+      animation: glitch 2s infinite;
+    }
+
+    @keyframes glitch {
+      0% { text-shadow: 2px 0 red, -2px 0 cyan; }
+      25% { text-shadow: -2px 0 red, 2px 0 cyan; }
+      50% { text-shadow: 1px 1px red, -1px -1px cyan; }
+      75% { text-shadow: -1px 1px red, 1px -1px cyan; }
+      100% { text-shadow: 2px 0 red, -2px 0 cyan; }
+    }
+  </style>
+</head>
+<body>
+  <div class="terminal">
+    <p>> ACCESSING SYSTEM CORE...</p>
+    <p>> ERROR: PRIMARY MEMORY CORRUPTED</p>
+    <p>> BOOTING AUXILIARY SHELL</p>
+    <p>> WELCOME, <span class="glitch-text">USER_███</span></p>
+    <p>[ Select Access Point: ]</p>
+
+    <a href="#" class="menu-item">//[VIOLET THREAD]</a>
+    <a href="#" class="menu-item">//[VESSEL.LOG]</a>
+    <a href="#" class="menu-item">//[REM-03.RVN]</a>
+    <a href="#" class="menu-item">//[THE CISTERN]</a>
+    <a href="#" class="menu-item">//[ECHO TRACE]</a>
+    <a href="#" class="menu-item">//[ETR.SCRIPTURE]</a>
+    <a href="#" class="menu-item">//[FRAGMENTED]</a>
+
+    <p><span class="cursor">_</span></p>
+  </div>
+</body>
+</html>
