@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>VESSEL.LOG</title>
+  <style>
+    body {
+      background-color: #000;
+      color: #b36eff;
+      font-family: 'VT323', monospace;
+      font-size: 20px;
+      padding: 40px;
+    }
+    .cursor {
+      display: inline-block;
+      width: 10px;
+      background-color: #b36eff;
+      animation: blink 1s steps(2, start) infinite;
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+  <p>> ACCESSING [VESSEL.LOG]...</p>
+  <p>> ENTRY 01: ██SYSTEM_BOOT_SEED██</p>
+  <p>> ENTRY 02: ██MEMORY CORRUPTION DETECTED██</p>
+  <p>> ENTRY 03: ██ORIGIN UNKNOWN██</p>
+  <p>> ENTRY 04: WE SEE YOU MARK.</p>
+  <p><span class="cursor">_</span></p>
+</body>
+</html>
