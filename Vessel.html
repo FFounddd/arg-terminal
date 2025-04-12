@@ -17,24 +17,85 @@
       background-color: #b36eff;
       animation: blink 1s steps(2, start) infinite;
     }
-    @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0; }
+    .log-entry {
+      cursor: pointer;
+      color: #b36eff;
+      text-decoration: none;
+      display: block;
+      margin: 10px 0;
+    }
+    .log-entry:hover {
+      text-shadow: 0 0 5px #b36eff;
+      color: #fff;
+    }
+    .log-content {
+      margin-top: 20px;
+      display: none;
+      white-space: pre-wrap;
+      font-size: 18px;
+      color: #9b59b6;
     }
   </style>
 </head>
 <body>
   <p>> ACCESSING [VESSEL.LOG]...</p>
-  <p>> ENTRY 01: ██SYSTEM_BOOT_SEED██</p>
-  <p>> ENTRY 02: ██MEMORY CORRUPTION DETECTED██</p>
-  <p>> ENTRY 03: ██ORIGIN UNKNOWN██</p>
-  <p>> ENTRY 04: ██SUBPERSONALITY HELIOS_ARCHIVE LOADED...██</p>
-  <p>> ENTRY 05: ██PLEASE_STOP_THIS_FUCKING_POUNDING_IN_MY_SKULL██</p>
-  <p>> ENTRY 06: ██I_CAN'T_FEEL_MY_ARMS██</p>
-  <p>> ENTRY 07: ██WHERE_AM_I?
-  <p>> ENTRY 08: ██WHERE_IS_MY_MEDEA?██</p>
-  <p>> ENTRY 09: ██I_CAN'T_BREATH██</p>
-  <p>> ENTRY 010: ██WHERE_IS_THE_LIGHT?██</p> 
+
+  <!-- Clickable log entries -->
+  <a href="#" class="log-entry" onclick="toggleLogContent('entry1')">ENTRY 01: ██SYSTEM_BOOT_SEED██</a>
+  <a href="#" class="log-entry" onclick="toggleLogContent('entry2')">ENTRY 02: ██MEMORY CORRUPTION DETECTED██</a>
+  <a href="#" class="log-entry" onclick="toggleLogContent('entry3')">ENTRY 03: ██ORIGIN UNKNOWN██</a>
+  <a href="#" class="log-entry" onclick="toggleLogContent('entry4')">ENTRY 04: ██SUBPERSONALITY HELIOS_ARCHIVE LOADED...██</a>
+  <a href="#" class="log-entry" onclick="toggleLogContent('entry5')">ENTRY 05: ██PLEASE_STOP_THIS_FUCKING_POUNDING_IN_MY_SKULL██</a>
+  <a href="#" class="log-entry" onclick="toggleLogContent('entry6')">ENTRY 06: ██I_CAN'T_FEEL_MY_ARMS██</a>
+  <a href="#" class="log-entry" onclick="toggleLogContent('entry7')">ENTRY 07: ██WHERE_AM_I?██</a>
+  <a href="#" class="log-entry" onclick="toggleLogContent('entry8')">ENTRY 08: ██WHERE_IS_MY_MEDEA?██</a>
+  <a href="#" class="log-entry" onclick="toggleLogContent('entry9')">ENTRY 09: ██I_CAN'T_BREATHE██</a>
+  <a href="#" class="log-entry" onclick="toggleLogContent('entry10')">ENTRY 010: ██WHERE_IS_THE_LIGHT?██</a>
+
+  <!-- Hidden content for each log entry -->
+  <div id="entry1" class="log-content">
+    Details for ENTRY 01: SYSTEM_BOOT_SEED: The initial boot sequence has started. Memory corruption detected.
+  </div>
+  <div id="entry2" class="log-content">
+    Details for ENTRY 02: MEMORY_CORRUPTION_DETECTED: Corrupted sectors found in primary memory banks. System may be unstable.
+  </div>
+  <div id="entry3" class="log-content">
+    Details for ENTRY 03: ORIGIN_UNKNOWN: The source of the corruption is unknown. No external communication detected.
+  </div>
+  <div id="entry4" class="log-content">
+    Details for ENTRY 04: SUBPERSONALITY_HELIOS_ARCHIVE_LOADED: Loaded Helios archive as a subpersonality. Some information might be corrupted.
+  </div>
+  <div id="entry5" class="log-content">
+    Details for ENTRY 05: PLEASE_STOP_THIS_FUCKING_POUNDING_IN_MY_SKULL: Audio feedback loop detected. Subject reporting severe pain.
+  </div>
+  <div id="entry6" class="log-content">
+    Details for ENTRY 06: I_CAN'T_FEEL_MY_ARMS: Subject reporting loss of sensation in limbs. Possible neural disconnection.
+  </div>
+  <div id="entry7" class="log-content">
+    Details for ENTRY 07: WHERE_AM_I?: Subject experiencing confusion and disorientation. Location unknown.
+  </div>
+  <div id="entry8" class="log-content">
+    Details for ENTRY 08: WHERE_IS_MY_MEDEA?: Subject querying the status of "Medea." Subject seems emotionally distressed.
+  </div>
+  <div id="entry9" class="log-content">
+    Details for ENTRY 09: I_CAN'T_BREATHE: Subject reporting difficulty breathing. Possible system malfunction or panic response.
+  </div>
+  <div id="entry10" class="log-content">
+    Details for ENTRY 010: WHERE_IS_THE_LIGHT?: Subject reporting vision issues. Environment may be dark or malfunctioning.
+  </div>
+
   <p><span class="cursor">_</span></p>
+
+  <script>
+    // Function to toggle the visibility of log details
+    function toggleLogContent(entryId) {
+      var content = document.getElementById(entryId);
+      if (content.style.display === "none" || content.style.display === "") {
+        content.style.display = "block";
+      } else {
+        content.style.display = "none";
+      }
+    }
+  </script>
 </body>
 </html>
