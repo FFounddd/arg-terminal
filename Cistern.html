@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>THE CISTERN</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
+    body {
+      margin: 0;
+      background-color: #000;
+      font-family: 'VT323', monospace;
+      color: #b36eff;
+      font-size: 18px;
+      overflow: hidden;
+    }
+
+    .screen {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      padding: 10px;
+      overflow: hidden;
+    }
+
+    .entry {
+      position: absolute;
+      max-width: 250px;
+      padding: 6px 10px;
+      background: rgba(20, 0, 30, 0.4);
+      border-left: 3px solid #b36eff;
+      box-shadow: 0 0 10px #7300e6;
+      transition: transform 0.2s ease;
+      word-wrap: break-word;
+      pointer-events: auto;
+    }
+
+    .entry:hover {
+      transform: scale(1.05);
+      z-index: 10;
+    }
+
+    .glitch {
+      animation: glitch 2s infinite;
+    }
+
+    @keyframes glitch {
+      0%, 100% { text-shadow: 2px 0 red, -2px 0 cyan; }
+      25% { text-shadow: -2px 0 red, 2px 0 cyan; }
+      50% { text-shadow: 1px 1px red, -1px -1px cyan; }
+      75% { text-shadow: -1px 1px red, 1px -1px cyan; }
+    }
+
+    .locked {
+      color: #444;
+      text-shadow: none;
+      border-left: 3px solid #222;
+      pointer-events: none;
+    }
+
+    .icon {
+      width: 16px;
+      height: 16px;
+      background: #b36eff;
+      display: inline-block;
+      margin-right: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="screen" id="screen"></div>
+
+  <script>
+    const entries = [
+      "Found: She never intended for me to survive this long.",
+      "Lieven: My blades are dulling. Not from use, but rot.",
+      "Ruvimbo: They're watching us from inside the glass. It's not reflection.",
+      "Medea: He said I would be safe. That this place was sanctuary.",
+      "Nyxis: Corruption blooms not in soil, but in scripture.",
+      "Eter: DIVINE ORDER ESTABLISHED — REMOVE LINE 42",
+      "Found: Something rewrote my thoughts mid-sentence.",
+      "Web: lol what is THIS? cringe. deleting it.",
+      "Helios: I woke up with his voice in my head. Not mine. His.",
+      "Ori: I am not your enemy, but I must be your end.",
+      "Ruvimbo: The walls whisper names I never told anyone.",
+      "ISM: Praise be to HER. Praise be to PAIN.",
+      "Found: This entry was tampered with by ████████",
+      "Lieven: They made me wear the skin of my own shadow.",
+      "Web: left a little gift in your backup directory. enjoy.",
+      "Eter: ENACT LOOP 03-C. ENACT LOOP 03-C. ENACT—",
+      "Web: the 'light' you've been chasing? That's me with a flashlight.",
+      "Medea: I remember dying. I remember being wrong.",
+      "Nyxis: He will never be free while she is worshipped.",
+      "Corrupted: ████████████████████████",
+      "Found: Entry missing. Entry missing. Entry—",
+      "Web: you think these are your thoughts. cute."
+      "fOUnD: My names Found and all I do is whine and whine about the shit I did, wahh, wahh",
+    ];
+
+    function createEntry(text, isLocked = false) {
+      const div = document.createElement('div');
+      div.classList.add('entry');
+      if (isLocked) div.classList.add('locked');
+      if (Math.random() > 0.7) div.classList.add('glitch');
+
+      // Optional icon
+      const icon = document.createElement('span');
+      icon.className = 'icon';
+      div.appendChild(icon);
+
+      const content = document.createTextNode(text);
+      div.appendChild(content);
+
+      // Random safe position (keep entries away from edges)
+      const screen = document.getElementById('screen');
+      const maxX = screen.clientWidth - 270;
+      const maxY = screen.clientHeight - 60;
+      const x = Math.random() * maxX;
+      const y = Math.random() * maxY;
+
+      div.style.left = `${x}px`;
+      div.style.top = `${y}px`;
+
+      screen.appendChild(div);
+    }
+
+    entries.forEach((entry, i) => {
+      const isLocked = Math.random() > 0.8;
+      createEntry(entry, isLocked);
+    });
+  </script>
+</body>
+</html>
