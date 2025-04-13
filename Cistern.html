@@ -44,11 +44,26 @@
       animation: glitch 2s infinite;
     }
 
+    .webglitch {
+      animation: fullGlitch 2s infinite;
+      filter: invert(1) hue-rotate(180deg);
+      border-left: 3px solid red;
+      box-shadow: 0 0 15px red;
+    }
+
     @keyframes glitch {
       0%, 100% { text-shadow: 2px 0 red, -2px 0 cyan; }
       25% { text-shadow: -2px 0 red, 2px 0 cyan; }
       50% { text-shadow: 1px 1px red, -1px -1px cyan; }
       75% { text-shadow: -1px 1px red, 1px -1px cyan; }
+    }
+
+    @keyframes fullGlitch {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      10% { transform: scale(1.05) rotate(1deg); opacity: 0.7; }
+      20% { transform: scale(0.95) rotate(-1deg); opacity: 1; }
+      30% { transform: scale(1.02) rotate(2deg); opacity: 0.5; }
+      50% { transform: scale(1.1); opacity: 0.2; }
     }
 
     .locked {
@@ -69,7 +84,7 @@
 </head>
 <body>
   <div class="screen" id="screen"></div>
- //These are the script entries left by Found and His team... Why is web here? Dude you KNOW Found doesn't want Web in this!! Get her outta here!!!
+
   <script>
     const entries = [
       "Found: She never intended for me to survive this long.",
@@ -103,7 +118,6 @@
       if (isLocked) div.classList.add('locked');
       if (Math.random() > 0.7) div.classList.add('glitch');
 
-      // Optional icon
       const icon = document.createElement('span');
       icon.className = 'icon';
       div.appendChild(icon);
@@ -111,7 +125,6 @@
       const content = document.createTextNode(text);
       div.appendChild(content);
 
-      // Random safe position (keep entries away from edges)
       const screen = document.getElementById('screen');
       const maxX = screen.clientWidth - 270;
       const maxY = screen.clientHeight - 60;
@@ -122,11 +135,20 @@
       div.style.top = `${y}px`;
 
       screen.appendChild(div);
+      return div;
     }
 
     entries.forEach((entry, i) => {
       const isLocked = Math.random() > 0.8;
-      createEntry(entry, isLocked);
+      const delay = 500;
+
+      setTimeout(() => {
+        const div = createEntry(entry, isLocked);
+
+        if (entry.startsWith("Web:")) {
+          div.classList.add('webglitch');
+        }
+      }, i * delay);
     });
   </script>
 </body>
