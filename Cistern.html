@@ -25,11 +25,11 @@
 
     .entry {
       position: absolute;
-      max-width: 250px;
-      padding: 6px 10px;
-      background: rgba(20, 0, 30, 0.4);
+      max-width: 300px;
+      padding: 10px 14px;
+      background: rgba(20, 0, 30, 0.45);
       border-left: 3px solid #b36eff;
-      box-shadow: 0 0 10px #7300e6;
+      box-shadow: 0 0 12px #7300e6aa;
       transition: transform 0.2s ease;
       word-wrap: break-word;
       pointer-events: auto;
@@ -41,11 +41,11 @@
     }
 
     .glitch {
-      animation: glitch 2s infinite;
+      animation: glitch 2.5s infinite;
     }
 
     .webglitch {
-      animation: fullGlitch 2s infinite;
+      animation: fullGlitch 2.5s infinite;
       filter: invert(1) hue-rotate(180deg);
       border-left: 3px solid red;
       box-shadow: 0 0 15px red;
@@ -80,6 +80,30 @@
       display: inline-block;
       margin-right: 5px;
     }
+
+    /* Back button styles */
+    .back-btn {
+      display: inline-block;
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      color: #b36eff;
+      text-decoration: none;
+      font-size: 1.1rem;
+      padding: 0.4rem 1rem;
+      border: 1px solid #b36eff;
+      border-radius: 6px;
+      background-color: transparent;
+      transition: all 0.3s ease;
+      filter: drop-shadow(0 0 4px #b36eff);
+      z-index: 9999;
+    }
+
+    .back-btn:hover {
+      color: #fff;
+      background-color: #b36eff;
+      filter: drop-shadow(0 0 6px #d6aaff);
+    }
   </style>
 </head>
 <body>
@@ -87,29 +111,45 @@
 
   <script>
     const entries = [
-      "Found: She never intended for me to survive this long.",
-      "Lieven: My blades are dulling. Not from use, but rot.",
-      "Ruvimbo: They're watching us from inside the glass. It's not reflection.",
-      "Medea: He said I would be safe. That this place was sanctuary.",
-      "Nyxis: Corruption blooms not in soil, but in scripture.",
-      "Eter: DIVINE ORDER ESTABLISHED — REMOVE LINE 42",
-      "Found: Something rewrote my thoughts mid-sentence.",
-      "Web: lol what is THIS? cringe. deleting it.",
-      "Helios: I woke up with his voice in my head. Not mine. His.",
-      "Ori: I am not your enemy, but I must be your end.",
-      "Ruvimbo: The walls whisper names I never told anyone.",
-      "ISM: Praise be to HER. Praise be to PAIN.",
-      "Found: This entry was tampered with by ████████",
-      "Lieven: They made me wear the skin of my own shadow.",
-      "Web: left a little gift in your backup directory. enjoy.",
-      "Eter: ENACT LOOP 03-C. ENACT LOOP 03-C. ENACT—",
-      "Web: the 'light' you've been chasing? That's me with a flashlight.",
-      "Medea: I remember dying. I remember being wrong.",
-      "Nyxis: He will never be free while she is worshipped.",
-      "Corrupted: ████████████████████████",
-      "Found: Entry missing. Entry missing. Entry—",
-      "Web: you think these are your thoughts. cute.",
-      "fOUnD: My names Found and all I do is whine and whine about the shit I did, wahh, wahh",
+      "Found: She's humming with it now. The crystal. I can't tell which of us is dreaming.",
+      "Ruvimbo: I can hear it under my skin. The hum. It's in the pipes.",
+      "Medea: He didn’t mean it. But I saw something in his eyes. Something I shouldn’t have.",
+      "Lieven: He asked me if blades could pray. I said no. He smiled.",
+      "Helios: I was not meant to exist like this. And yet, I endure.",
+      "ISM: Her voice demands sacrifice. I obey.",
+      "Eternian Citizen: There’s light from the ground at night. Like it’s bleeding the stars back up.",
+      "Eternian Citizen: They say he speaks to the stone. That it listens. That it learns.",
+      "Nyxis: The deeper he digs, the closer she gets.",
+      "Found: I woke up with memory static. ISM told me it’s nothing. It feels like something.",
+      "ISM: Pain is not the cost. It’s the method.",
+      "Lieven: My arms ache when he’s near the shard. Like they remember something I never lived.",
+      "Medea: It’s worse at night. The resonance. It sounds like her voice, but twisted.",
+      "Ruvimbo: I caught a glimpse of it. Just once. I don’t want to again.",
+      "Found: If this is what god is, we were better without it.",
+      "Helios: Found used to joke with me. I miss the laughter.",
+      "Nyxis: You will never be whole again while she watches.",
+      "ISM: Broken things belong to her.",
+      // New entries below
+      "Found: Every time I sleep, she reaches deeper.",
+      "Found: I stitched my memories back together. They don't fit anymore.",
+      "Found: The crystal remembers things I haven’t done yet.",
+      "Ruvimbo: His reflection in the containment glass was smiling. He wasn’t.",
+      "Ruvimbo: I ran diagnostics twice. The results came back… praying.",
+      "Ruvimbo: We were just meant to **study** it, not **feed** it.",
+      "Lieven: My hands tremble. I think the blade knows what’s coming.",
+      "Lieven: Blood doesn't stick to the metal anymore. It absorbs.",
+      "Lieven: There was a second voice when I screamed. A higher one.",
+      "Medea: I woke up with a scar I didn’t earn.",
+      "Medea: I thought love could save him. I was wrong.",
+      "Medea: When he apologized, he didn’t blink. He never blinks anymore.",
+      "ISM: HER light is agony. HER light is perfect.",
+      "ISM: Execution logged. Mercy denied. Glory to HER.",
+      "ISM: Found spoke out of turn. I reminded him.",
+      "Helios: My voice isn’t mine. It echoes like an empty room.",
+      "Helios: I’m still here, you know. Somewhere under the screaming.",
+      "Helios: The sun doesn't rise in this place. It watches.",
+      "Civilian Report 782: The stars blinked out last week. Nobody noticed.",
+      "Maintenance Log: The walls won't stay patched. They breathe now."
     ];
 
     function createEntry(text, isLocked = false) {
@@ -126,8 +166,8 @@
       div.appendChild(content);
 
       const screen = document.getElementById('screen');
-      const maxX = screen.clientWidth - 270;
-      const maxY = screen.clientHeight - 60;
+      const maxX = screen.clientWidth - 310;
+      const maxY = screen.clientHeight - 70;
       const x = Math.random() * maxX;
       const y = Math.random() * maxY;
 
@@ -139,46 +179,19 @@
     }
 
     entries.forEach((entry, i) => {
-      const isLocked = Math.random() > 0.8;
-      const delay = 500;
+      const isLocked = Math.random() > 0.85;
+      const delay = 400;
 
       setTimeout(() => {
         const div = createEntry(entry, isLocked);
-
-        if (entry.startsWith("Web:")) {
+        if (entry.includes("ISM") || entry.includes("Web:")) {
           div.classList.add('webglitch');
         }
       }, i * delay);
     });
   </script>
+
+  <!-- Back button to return to the main terminal page -->
+  <a href="index.html" class="back-btn">&larr; Return to Terminal</a>
 </body>
 </html>
-
-<!-- Back button to return to the main terminal page -->
-<a href="index.html" class="back-btn">&larr; Return to Terminal</a>
-
-<style>
-  .back-btn {
-    display: inline-block;
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    color: #b36eff;
-    text-decoration: none;
-    font-size: 1.1rem;
-    padding: 0.4rem 1rem;
-    border: 1px solid #b36eff;
-    border-radius: 6px;
-    background-color: transparent;
-    transition: all 0.3s ease;
-    filter: drop-shadow(0 0 4px #b36eff);
-    z-index: 9999;
-  }
-
-  .back-btn:hover {
-    color: #fff;
-    background-color: #b36eff;
-    filter: drop-shadow(0 0 6px #d6aaff);
-  }
-</style>
-
