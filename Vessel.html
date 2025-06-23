@@ -301,30 +301,31 @@
     }
   }
 </style>
-<a href="index.html" class="home-button" title="Return Home">
-  <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none">
-    <path d="M3 10L12 3L21 10V20C21 20.5523 20.5523 21 20 21H15C14.4477 21 14 20.5523 14 20V16C14 15.4477 13.5523 15 13 15H11C10.4477 15 10 15.4477 10 16V20C10 20.5523 9.55228 21 9 21H4C3.44772 21 3 20.5523 3 20V10Z" 
-      stroke="#b36eff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-  </svg>
-</a>
+<!-- Back button to return to the main terminal page -->
+<a href="index.html" class="back-btn">&larr; Return to Terminal</a>
 
 <style>
-  .home-button {
+  .back-btn {
+    display: inline-block;
     position: fixed;
     top: 20px;
     right: 20px;
+    color: #b36eff;
+    text-decoration: none;
+    font-size: 1.1rem;
+    padding: 0.4rem 1rem;
+    border: 1px solid #b36eff;
+    border-radius: 6px;
+    background-color: transparent;
+    transition: all 0.3s ease;
+    filter: drop-shadow(0 0 4px #b36eff);
     z-index: 9999;
-    display: inline-block;
-    transition: transform 0.2s ease;
-    filter: drop-shadow(0 0 6px #b36eff);
   }
 
-  .home-button:hover {
-    transform: scale(1.2);
-    filter: drop-shadow(0 0 8px #d6aaff);
-  }
-
-  .home-button svg {
-    display: block;
+  .back-btn:hover {
+    color: #fff;
+    background-color: #b36eff;
+    filter: drop-shadow(0 0 6px #d6aaff);
   }
 </style>
+
