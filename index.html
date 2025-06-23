@@ -9,7 +9,7 @@
 
     body {
       margin: 0;
-      background-color: #000;
+      background: #000;
       color: #b36eff;
       font-family: 'VT323', monospace;
       font-size: 20px;
@@ -19,32 +19,58 @@
       align-items: center;
       height: 100vh;
       overflow: hidden;
-    }
-
-    .terminal {
-      width: 80vw;
-      max-width: 800px;
-      padding: 40px;
-      background: rgba(0, 0, 0, 0.85);
-      border: 2px solid #b36eff;
-      box-shadow: 0 0 30px #b36eff;
       position: relative;
     }
 
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+    }
+
+    .terminal {
+      background: rgba(0, 0, 0, 0.9);
+      padding: 40px;
+      width: 90%;
+      max-width: 800px;
+      border: 2px solid #b36eff;
+      box-shadow: 0 0 40px #b36eff66;
+      position: relative;
+      z-index: 1;
+    }
+
     .terminal::after {
-      content: '';
+      content: "";
       position: absolute;
-      width: 100%;
-      height: 100%;
+      inset: 0;
       background: repeating-linear-gradient(
         to bottom,
-        rgba(0, 0, 0, 0.1),
-        rgba(0, 0, 0, 0.1) 2px,
-        transparent 2px,
-        transparent 4px
+        rgba(255, 255, 255, 0.03),
+        rgba(255, 255, 255, 0.03) 1px,
+        transparent 1px,
+        transparent 3px
       );
       pointer-events: none;
       z-index: 2;
+    }
+
+    p {
+      margin: 0.6rem 0;
+      text-shadow: 0 0 2px #b36effaa;
+      animation: flicker 4s infinite;
+    }
+
+    @keyframes flicker {
+      0%, 100% { opacity: 1; }
+      45% { opacity: 0.95; }
+      46% { opacity: 0.85; }
+      47% { opacity: 1; }
+      92% { opacity: 0.97; }
+      93% { opacity: 0.85; }
+      94% { opacity: 1; }
     }
 
     .cursor {
@@ -52,6 +78,7 @@
       width: 10px;
       background-color: #b36eff;
       animation: blink 1s steps(2, start) infinite;
+      vertical-align: bottom;
     }
 
     @keyframes blink {
@@ -60,50 +87,92 @@
     }
 
     .menu-item {
+      display: block;
       color: #b36eff;
       text-decoration: none;
-      display: block;
-      margin: 10px 0;
-      position: relative;
+      margin: 0.5rem 0;
       transition: all 0.3s ease;
+      position: relative;
+      padding-left: 10px;
+    }
+
+    .menu-item::before {
+      content: ">";
+      position: absolute;
+      left: 0;
+      color: #b36eff;
     }
 
     .menu-item:hover {
-      color: #fff;
-      text-shadow: 0 0 5px #b36eff;
-      transform: scale(1.03);
+      color: #ffffff;
+      text-shadow: 0 0 6px #b36eff;
+      transform: scale(1.01);
     }
 
-    .glitch-text {
-      animation: glitch 2s infinite;
-    }
-
-    @keyframes glitch {
-      0% { text-shadow: 2px 0 red, -2px 0 cyan; }
-      25% { text-shadow: -2px 0 red, 2px 0 cyan; }
-      50% { text-shadow: 1px 1px red, -1px -1px cyan; }
-      75% { text-shadow: -1px 1px red, 1px -1px cyan; }
-      100% { text-shadow: 2px 0 red, -2px 0 cyan; }
+    .username {
+      color: #b36eff;
+      text-shadow: 0 0 6px #8a2be2;
     }
   </style>
 </head>
 <body>
-  <div class="terminal">
-    <p>> ACCESSING SYSTEM CORE...</p>
-    <p>> ERROR: PRIMARY MEMORY CORRUPTED!</p>
-    <p>> BOOTING AUXILIARY SHELL</p>
-    <p>> WELCOME, <span class="glitch-text">USER_███</span></p>
-    <p>[ Select Access Point: ]</p>
 
-    <a href="Violet_Thread.html" class="menu-item">//[VIOLET THREAD]</a>
-    <a href="Vessel.html" class="menu-item">//[VESSEL.LOG]</a>
-    <a href="#" class="menu-item">//[REM-03.RVN]</a>
-    <a href="Cistern.html" class="menu-item">//[THE CISTERN]</a>
-    <a href="Echo-trace.html" class="menu-item">//[ECHO TRACE]</a>
-    <a href="Etr_Scripture.html" class="menu-item">//[ETR.SCRIPTURE]</a>
-    <a href="#" class="menu-item">//[FRAGMENTED]</a>
+<canvas id="matrixCanvas"></canvas>
 
-    <p><span class="cursor">_</span></p>
-  </div>
+<div class="terminal">
+  <p>&gt; ACCESSING SYSTEM CORE...</p>
+  <p>&gt; ERROR: PRIMARY MEMORY CORRUPTED</p>
+  <p>&gt; BOOTING AUXILIARY SHELL...</p>
+  <p>&gt; WELCOME, <span class="username">USER_███</span></p>
+  <p>[ SELECT ACCESS POINT: ]</p>
+
+  <a href="Violet_Thread.html" class="menu-item"> //[ VIOLET THREAD ]</a>
+  <a href="Vessel.html" class="menu-item"> //[ VESSEL.LOG ]</a>
+  <a href="#" class="menu-item"> //[ REM-03.RVN ]</a>
+  <a href="Cistern.html" class="menu-item"> //[ THE CISTERN ]</a>
+  <a href="Echo-trace.html" class="menu-item"> //[ ECHO TRACE ]</a>
+  <a href="Etr_Scripture.html" class="menu-item"> //[ ETR.SCRIPTURE ]</a>
+  <a href="#" class="menu-item"> //[ FRAGMENTED ]</a>
+
+  <p><span class="cursor">_</span></p>
+</div>
+
+<script>
+  const canvas = document.getElementById('matrixCanvas');
+  const ctx = canvas.getContext('2d');
+
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  const fontSize = 20;
+  const columns = Math.floor(canvas.width / fontSize);
+  const drops = Array(columns).fill(1);
+
+  const draw = () => {
+    ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.fillStyle = "#b36eff";
+    ctx.font = fontSize + "px VT323";
+
+    for (let i = 0; i < drops.length; i++) {
+      const char = Math.floor(Math.random() * 10); // 0–9 only
+      ctx.fillText(char, i * fontSize, drops[i] * fontSize);
+
+      if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+        drops[i] = 0;
+      }
+      drops[i]++;
+    }
+  };
+
+  setInterval(draw, 50);
+
+  window.addEventListener('resize', () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  });
+</script>
+
 </body>
 </html>
