@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>The Violet Thread</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
+    body {
+      margin: 0;
+      background: #000;
+      color: #b36eff;
+      font-family: 'VT323', monospace;
+      overflow: hidden;
+    }
+
+    #thread {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 4px;
+      height: 80vh;
+      background: linear-gradient(to bottom, #300a53, #b36eff);
+      box-shadow: 0 0 10px #b36eff;
+      animation: pulse 2s infinite ease-in-out;
+    }
+
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 10px #b36eff; }
+      50% { box-shadow: 0 0 20px #b36eff; }
+    }
+
+    .node {
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      background-color: #b36eff;
+      border-radius: 50%;
+      cursor: pointer;
+      box-shadow: 0 0 6px #b36eff;
+    }
+
+    .log-window {
+      position: absolute;
+      background: rgba(10, 0, 15, 0.95);
+      border: 2px solid #b36eff;
+      color: #b36eff;
+      padding: 10px;
+      width: 300px;
+      font-size: 16px;
+      line-height: 1.4;
+      box-shadow: 0 0 15px #b36eff;
+      z-index: 10;
+    }
+
+    .observer-log {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      color: red;
+      font-size: 16px;
+      opacity: 0.7;
+    }
+
+    .found-interrupt {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.97);
+      color: #ff4de3;
+      font-family: 'VT323', monospace;
+      font-size: 18px;
+      overflow: hidden;
+      z-index: 9999;
+      padding: 20px;
+    }
+
+    .thought {
+      position: absolute;
+      white-space: nowrap;
+      pointer-events: none;
+      opacity: 0.1;
+      font-size: 14px;
+      animation: flicker 2s infinite;
+    }
+
+    @keyframes flicker {
+      0% { opacity: 0.05; }
+      50% { opacity: 0.2; }
+      100% { opacity: 0.05; }
+    }
+  </style>
+</head>
+<body>
+  <div id="thread"></div>
+  <div class="observer-log" id="observerLog"></div>
+
+  <script>
+    const nodeData = [
+      { y: '10%', log: 'THREAD NODE: 01-BX\nSUBJECT AWOKE BEFORE STIMULATION.\nTHREAD RESPONSE: UNSTABLE.' },
+      { y: '25%', log: 'THREAD NODE: 04-AE\nVESSEL\'S CORE REACTED TO MEDIAN SOUL SIGNAL.\nUNFORESEEN. -ISM' },
+      { y: '40%', log: 'THREAD NODE: 09-HE\nECHO DUPLICATES DETECTED IN SPIRIT MATRIX.\nEXTERNAL ACTOR: "NYXIS"' },
+      { y: '60%', log: 'THREAD NODE: 12-KL\nUNAUTHORIZED ENTRY DETECTED: SUBJECT "WEB".\nCORRUPTION LEVEL: HIGH' },
+      { y: '75%', log: 'THREAD NODE: 16-TN\nPRAYERS LOOPING. VESSEL BELIEVES.\nISSUE: DIVINE ECHO FRACTURING.' }
+    ];
+
+    let clickCount = 0;
+
+    function interruptByFound() {
+      const overlay = document.createElement('div');
+      overlay.className = 'found-interrupt';
+
+      const thoughts = [
+        "They all think I'm in control... I'm not.",
+        "If they knew what I did to Medea... they'd leave.",
+        "Why did I let Ori go? He needed me.",
+        "I hear Eter whispering when I'm alone.",
+        "I failed them. Over and over.",
+        "Maybe Web is right about me.",
+        "I shouldn't be the vessel. I'm broken.",
+        "They're better off without me.",
+        "This isn't what I wanted. This is what I deserve.",
+        "Stop reading. Please."
+      ];
+
+      for (let i = 0; i < 100; i++) {
+        const thought = document.createElement('div');
+        thought.className = 'thought';
+        thought.innerText = thoughts[Math.floor(Math.random() * thoughts.length)];
+        thought.style.top = `${Math.random() * 100}%`;
+        thought.style.left = `${Math.random() * 100}%`;
+        overlay.appendChild(thought);
+      }
+
+      document.body.appendChild(overlay);
+    }
+
+    const thread = document.getElementById('thread');
+
+    nodeData.forEach((data, index) => {
+      const node = document.createElement('div');
+      node.className = 'node';
+      node.style.top = data.y;
+      node.style.left = 'calc(50% - 7px)';
+      node.onclick = (e) => {
+        const logWindow = document.createElement('div');
+        logWindow.className = 'log-window';
+        logWindow.style.left = `${e.clientX + 10}px`;
+        logWindow.style.top = `${e.clientY}px`;
+        logWindow.innerText = data.log;
+
+        logWindow.onclick = () => logWindow.remove();
+
+        document.body.appendChild(logWindow);
+
+        const observer = document.getElementById('observerLog');
+        observer.innerText = `> OBSERVATION: NODE ${index + 1} ENGAGED.`;
+
+        clickCount++;
+        if (clickCount >= 4) interruptByFound();
+      };
+      thread.appendChild(node);
+    });
+  </script>
+</body>
+</html>
