@@ -1,123 +1,135 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ACCESS CORE</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ACCESS CORE</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
 
-    body {
-      margin: 0;
-      background: #000;
-      color: #b36eff;
-      font-family: 'VT323', monospace;
-      font-size: 20px;
-      line-height: 1.6;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      overflow: hidden;
-      position: relative;
-    }
+  body {
+    margin: 0;
+    background: #000;
+    color: #b36eff;
+    font-family: 'VT323', monospace;
+    font-size: 20px;
+    line-height: 1.6;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+    position: relative;
+  }
 
-    canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      z-index: 0;
-    }
+  canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+  }
 
-    .terminal {
-      background: rgba(0, 0, 0, 0.9);
-      padding: 40px;
-      width: 90%;
-      max-width: 800px;
-      border: 2px solid #b36eff;
-      box-shadow: 0 0 40px #b36eff66;
-      position: relative;
-      z-index: 1;
-    }
+  #matrixCanvas {
+    z-index: 0;
+  }
 
-    .terminal::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: repeating-linear-gradient(
-        to bottom,
-        rgba(255, 255, 255, 0.03),
-        rgba(255, 255, 255, 0.03) 1px,
-        transparent 1px,
-        transparent 3px
-      );
-      pointer-events: none;
-      z-index: 2;
-    }
+  #glitchCanvas {
+    z-index: 2; /* above matrixCanvas but below terminal */
+    pointer-events: none;
+  }
 
-    p {
-      margin: 0.6rem 0;
-      text-shadow: 0 0 2px #b36effaa;
-      animation: flicker 4s infinite;
-    }
+  .terminal {
+    background: rgba(0, 0, 0, 0.9);
+    padding: 40px;
+    width: 90%;
+    max-width: 800px;
+    border: 2px solid #b36eff;
+    box-shadow: 0 0 40px #b36eff66;
+    position: relative;
+    z-index: 3;
+  }
 
-    @keyframes flicker {
-      0%, 100% { opacity: 1; }
-      45% { opacity: 0.95; }
-      46% { opacity: 0.85; }
-      47% { opacity: 1; }
-      92% { opacity: 0.97; }
-      93% { opacity: 0.85; }
-      94% { opacity: 1; }
-    }
+  .terminal::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.03),
+      rgba(255, 255, 255, 0.03) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+    pointer-events: none;
+    z-index: 2;
+  }
 
-    .cursor {
-      display: inline-block;
-      width: 10px;
-      background-color: #b36eff;
-      animation: blink 1s steps(2, start) infinite;
-      vertical-align: bottom;
-    }
+  p {
+    margin: 0.6rem 0;
+    text-shadow: 0 0 2px #b36effaa;
+    animation: flicker 4s infinite;
+  }
 
-    @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0; }
-    }
+  @keyframes flicker {
+    0%, 100% { opacity: 1; }
+    45% { opacity: 0.95; }
+    46% { opacity: 0.85; }
+    47% { opacity: 1; }
+    92% { opacity: 0.97; }
+    93% { opacity: 0.85; }
+    94% { opacity: 1; }
+  }
 
-    .menu-item {
-      display: block;
-      color: #b36eff;
-      text-decoration: none;
-      margin: 0.5rem 0;
-      transition: all 0.3s ease;
-      position: relative;
-      padding-left: 10px;
-    }
+  .cursor {
+    display: inline-block;
+    width: 10px;
+    background-color: #b36eff;
+    animation: blink 1s steps(2, start) infinite;
+    vertical-align: bottom;
+  }
 
-    .menu-item::before {
-      content: ">";
-      position: absolute;
-      left: 0;
-      color: #b36eff;
-    }
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
 
-    .menu-item:hover {
-      color: #ffffff;
-      text-shadow: 0 0 6px #b36eff;
-      transform: scale(1.01);
-    }
+  .menu-item {
+    display: block;
+    color: #b36eff;
+    text-decoration: none;
+    margin: 0.5rem 0;
+    transition: all 0.3s ease;
+    position: relative;
+    padding-left: 10px;
+  }
 
-    .username {
-      color: #b36eff;
-      text-shadow: 0 0 6px #8a2be2;
-    }
-  </style>
+  .menu-item::before {
+    content: ">";
+    position: absolute;
+    left: 0;
+    color: #b36eff;
+  }
+
+  .menu-item:hover {
+    color: #ffffff;
+    text-shadow: 0 0 6px #b36eff;
+    transform: scale(1.01);
+  }
+
+  .username {
+    color: #b36eff;
+    text-shadow: 0 0 6px #8a2be2;
+  }
+</style>
 </head>
 <body>
 
+<!-- Matrix rain -->
 <canvas id="matrixCanvas"></canvas>
+
+<!-- Glitch overlay -->
+<canvas id="glitchCanvas"></canvas>
 
 <div class="terminal">
   <p>&gt; ACCESSING SYSTEM CORE...</p>
@@ -138,41 +150,63 @@
 </div>
 
 <script>
-  const canvas = document.getElementById('matrixCanvas');
-  const ctx = canvas.getContext('2d');
+  // MATRIX RAIN
+  const matrixCanvas = document.getElementById('matrixCanvas');
+  const matrixCtx = matrixCanvas.getContext('2d');
 
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
+  matrixCanvas.width = window.innerWidth;
+  matrixCanvas.height = window.innerHeight;
 
   const fontSize = 20;
-  const columns = Math.floor(canvas.width / fontSize);
+  const columns = Math.floor(matrixCanvas.width / fontSize);
   const drops = Array(columns).fill(1);
 
-  const draw = () => {
-    ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    ctx.fillStyle = "#b36eff";
-    ctx.font = fontSize + "px VT323";
+  function drawMatrix() {
+    matrixCtx.fillStyle = "rgba(0, 0, 0, 0.05)";
+    matrixCtx.fillRect(0, 0, matrixCanvas.width, matrixCanvas.height);
+    matrixCtx.fillStyle = "#b36eff";
+    matrixCtx.font = fontSize + "px VT323";
 
     for (let i = 0; i < drops.length; i++) {
-      const char = Math.floor(Math.random() * 10); // 0–9 only
-      ctx.fillText(char, i * fontSize, drops[i] * fontSize);
-
-      if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+      const char = Math.floor(Math.random() * 10);
+      matrixCtx.fillText(char, i * fontSize, drops[i] * fontSize);
+      if (drops[i] * fontSize > matrixCanvas.height && Math.random() > 0.975) {
         drops[i] = 0;
       }
       drops[i]++;
     }
-  };
+  }
 
-  setInterval(draw, 50);
+  setInterval(drawMatrix, 50);
 
   window.addEventListener('resize', () => {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    matrixCanvas.width = window.innerWidth;
+    matrixCanvas.height = window.innerHeight;
+    glitchCanvas.width = window.innerWidth;
+    glitchCanvas.height = window.innerHeight;
   });
-</script>
 
+  // GLITCH EFFECT
+  const glitchCanvas = document.getElementById('glitchCanvas');
+  const glitchCtx = glitchCanvas.getContext('2d');
+
+  glitchCanvas.width = window.innerWidth;
+  glitchCanvas.height = window.innerHeight;
+
+  function drawGlitch() {
+    glitchCtx.clearRect(0, 0, glitchCanvas.width, glitchCanvas.height);
+    if (Math.random() > 0.9) { // 10% chance to glitch each frame
+      const sliceHeight = Math.random() * 20 + 5;
+      const y = Math.random() * glitchCanvas.height;
+      const sliceWidth = glitchCanvas.width;
+      const imageData = matrixCtx.getImageData(0, y, sliceWidth, sliceHeight);
+      const offset = Math.random() * 40 - 20; // shift left/right
+      glitchCtx.putImageData(imageData, offset, y);
+    }
+    requestAnimationFrame(drawGlitch);
+  }
+
+  drawGlitch();
+</script>
 </body>
 </html>
