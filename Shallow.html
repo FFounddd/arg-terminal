@@ -64,11 +64,6 @@
     font-weight: bold;
   }
 
-  #audio-player {
-    width: 100%;
-    margin-bottom: 10px;
-  }
-
   #visualizer {
     width: 100%;
     height: 100px;
@@ -90,17 +85,13 @@
 
 <div class="container">
   <div class="lyrics-box" id="lyrics"></div>
-
-  <audio id="audio-player" controls>
-    <audio id="audio" src="Shallow.MP3" controls></audio>
-    Your browser does not support the audio element.
-  </audio>
-
   <canvas id="visualizer"></canvas>
 </div>
 
+<audio id="audio-player" src="Shallow.mp3"></audio>
+
 <script>
-// --- Purple Katakana Code Rain Setup ---
+// --- Purple Katakana Code Rain ---
 const katakana = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズヅブプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッン';
 
 const matrixCanvas = document.getElementById('matrix');
@@ -136,8 +127,7 @@ function drawMatrix() {
 }
 setInterval(drawMatrix, 33);
 
-
-// --- Lyrics data: [timestamp_in_seconds, lyric_line]
+// --- Lyrics data ---
 const lyricsData = [
   [22.74, "It's been a week since I seen your name come up on my phone"],
   [26.60, "You're lucky I get lonely, or I'd leave you all alone"],
@@ -224,15 +214,11 @@ async function typeLine(line) {
   lyricsBox.innerHTML = '';
 
   const isShallow = line.trim() === "Shallow";
-
   const span = document.createElement('span');
   span.className = 'typewriter';
-  if (isShallow) {
-    span.classList.add('bold');
-  }
+  if (isShallow) span.classList.add('bold');
   lyricsBox.appendChild(span);
 
-  // Typing speed 20ms per char
   for (let i = 0; i <= line.length; i++) {
     span.textContent = line.slice(0, i);
     await wait(20);
@@ -243,7 +229,7 @@ async function processLyrics(timestamp) {
   if (!startTimestamp) startTimestamp = timestamp;
   const elapsedSeconds = (timestamp - startTimestamp) / 1000;
 
-  if (currentLine >= lyricsData.length) return; // done
+  if (currentLine >= lyricsData.length) return;
 
   if (!isTyping && elapsedSeconds >= lyricsData[currentLine][0]) {
     isTyping = true;
@@ -253,10 +239,6 @@ async function processLyrics(timestamp) {
   }
   requestAnimationFrame(processLyrics);
 }
-
-window.onload = () => {
-  requestAnimationFrame(processLyrics);
-};
 
 // --- Audio Visualizer ---
 const audio = document.getElementById('audio-player');
@@ -298,20 +280,42 @@ function visualize() {
   visCtx.fillRect(0, 0, visCanvas.width, visCanvas.height);
 
   const barWidth = (visCanvas.width / bufferLength) * 2.5;
-  let barHeight;
   let x = 0;
 
   for(let i = 0; i < bufferLength; i++) {
-    barHeight = dataArray[i];
-    const r = 179;  // #b36eff rgb
-    const g = 110;
-    const b = 255;
-
-    visCtx.fillStyle = `rgb(${r},${g},${b})`;
+    const barHeight = dataArray[i];
+    visCtx.fillStyle = `rgb(179,110,255)`;
     visCtx.fillRect(x, visCanvas.height - barHeight / 2, barWidth, barHeight / 2);
     x += barWidth + 1;
   }
 }
+
+// --- Autoplay on load with fallback click ---
+window.onload = () => {
+  requestAnimationFrame(processLyrics);
+  audio.play().catch(() => {
+    const clickToPlay = document.createElement('div');
+    clickToPlay.textContent = "Click to start";
+    clickToPlay.style.position = "fixed";
+    clickToPlay.style.top = "0";
+    clickToPlay.style.left = "0";
+    clickToPlay.style.width = "100%";
+    clickToPlay.style.height = "100%";
+    clickToPlay.style.background = "black";
+    clickToPlay.style.color = "#b36eff";
+    clickToPlay.style.fontSize = "24px";
+    clickToPlay.style.display = "flex";
+    clickToPlay.style.justifyContent = "center";
+    clickToPlay.style.alignItems = "center";
+    clickToPlay.style.zIndex = "9999";
+    clickToPlay.style.cursor = "pointer";
+    document.body.appendChild(clickToPlay);
+    clickToPlay.addEventListener('click', () => {
+      audio.play();
+      document.body.removeChild(clickToPlay);
+    });
+  });
+};
 </script>
 
 </body>
