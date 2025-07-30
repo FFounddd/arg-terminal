@@ -5,13 +5,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>ACCESS CORE</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+  @font-face {
+    font-family: 'VCR';
+    src: url('VCR_OSD_MONO_1.001.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+  }
 
   body {
     margin: 0;
     background: #000;
     color: #b36eff;
-    font-family: 'VT323', monospace;
+    font-family: 'VCR', monospace;
     font-size: 20px;
     line-height: 1.6;
     display: flex;
@@ -21,6 +26,8 @@
     overflow: hidden;
     position: relative;
   }
+</style>
+
 
   canvas {
     position: fixed;
