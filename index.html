@@ -2,216 +2,317 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>ACCESS CORE</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Shallow Lyrics Player with Visualizer</title>
 <style>
-  @font-face {
-    font-family: 'VCR';
-    src: url('VCR_OSD_MONO_1.001.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-  }
+  @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
 
   body {
     margin: 0;
-    background: #000;
+    background: black;
     color: #b36eff;
-    font-family: 'VCR', monospace;
-    font-size: 20px;
-    line-height: 1.6;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+    font-family: 'VT323', monospace;
     overflow: hidden;
-    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    padding: 20px;
   }
 
-  canvas {
+  canvas#matrix {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100vw;
-    height: 100vh;
-  }
-
-  #matrixCanvas {
     z-index: 0;
-  }
-
-  #glitchCanvas {
-    z-index: 2; /* above matrixCanvas but below terminal */
     pointer-events: none;
   }
 
-  .terminal {
-    background: rgba(0, 0, 0, 0.9);
-    padding: 40px;
-    width: 90%;
+  .container {
+    position: relative;
+    z-index: 1;
+    width: 80%;
     max-width: 800px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .lyrics-box {
+    width: 100%;
+    text-align: center;
+    min-height: 50px;
+    font-size: 24px;
+    background: rgba(20,0,30,0.4);
     border: 2px solid #b36eff;
-    box-shadow: 0 0 40px #b36eff66;
-    position: relative;
-    z-index: 3;
+    box-shadow: 0 0 20px #7300e6aa;
+    padding: 10px 20px;
+    user-select: none;
+    margin-bottom: 20px;
   }
 
-  .terminal::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: repeating-linear-gradient(
-      to bottom,
-      rgba(255, 255, 255, 0.03),
-      rgba(255, 255, 255, 0.03) 1px,
-      transparent 1px,
-      transparent 3px
-    );
-    pointer-events: none;
-    z-index: 2;
-  }
-
-  p {
-    margin: 0.6rem 0;
-    text-shadow: 0 0 2px #b36effaa;
-    animation: flicker 4s infinite;
-  }
-
-  @keyframes flicker {
-    0%, 100% { opacity: 1; }
-    45% { opacity: 0.95; }
-    46% { opacity: 0.85; }
-    47% { opacity: 1; }
-    92% { opacity: 0.97; }
-    93% { opacity: 0.85; }
-    94% { opacity: 1; }
-  }
-
-  .cursor {
+  .typewriter {
     display: inline-block;
-    width: 10px;
-    background-color: #b36eff;
-    animation: blink 1s steps(2, start) infinite;
-    vertical-align: bottom;
+    overflow: hidden;
+    white-space: nowrap;
+    border-right: 2px solid #b36eff;
+    animation: blinkCursor 0.8s steps(1) infinite;
   }
 
-  @keyframes blink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0; }
+  .bold {
+    font-weight: bold;
   }
 
-  .menu-item {
-    display: block;
-    color: #b36eff;
-    text-decoration: none;
-    margin: 0.5rem 0;
-    transition: all 0.3s ease;
-    position: relative;
-    padding-left: 10px;
+  #audio-player {
+    width: 100%;
+    margin-bottom: 10px;
   }
 
-  .menu-item::before {
-    content: ">";
-    position: absolute;
-    left: 0;
-    color: #b36eff;
+  #visualizer {
+    width: 100%;
+    height: 100px;
+    background: #10001a;
+    border: 2px solid #b36eff;
+    box-shadow: 0 0 15px #7300e6aa;
+    border-radius: 5px;
   }
 
-  .menu-item:hover {
-    color: #ffffff;
-    text-shadow: 0 0 6px #b36eff;
-    transform: scale(1.01);
-  }
-
-  .username {
-    color: #b36eff;
-    text-shadow: 0 0 6px #8a2be2;
+  @keyframes blinkCursor {
+    0%, 100% { border-color: #b36eff; }
+    50% { border-color: transparent; }
   }
 </style>
 </head>
 <body>
 
-<!-- Matrix rain -->
-<canvas id="matrixCanvas"></canvas>
+<canvas id="matrix"></canvas>
 
-<!-- Glitch overlay -->
-<canvas id="glitchCanvas"></canvas>
+<div class="container">
+  <div class="lyrics-box" id="lyrics"></div>
 
-<div class="terminal">
-  <p>&gt; ACCESSING SYSTEM CORE...</p>
-  <p>&gt; ERROR: PRIMARY MEMORY CORRUPTED</p>
-  <p>&gt; BOOTING AUXILIARY SHELL...</p>
-  <p>&gt; WELCOME, <span class="username">USER_███</span></p>
-  <p>[ SELECT ACCESS POINT: ]</p>
+  <audio id="audio-player" controls>
+    <source src="https://cdn.jsdelivr.net/gh/terkelg/shallow/official_audio.mp3" type="audio/mpeg" />
+    Your browser does not support the audio element.
+  </audio>
 
-  <a href="Violet_Thread.html" class="menu-item"> //[ VIOLET THREAD ]</a>
-  <a href="Vessel.html" class="menu-item"> //[ VESSEL.LOG ]</a>
-  <a href="REM.html" class="menu-item"> //[ REM-03.RVN ]</a>
-  <a href="Cistern.html" class="menu-item"> //[ THE CISTERN ]</a>
-  <a href="Echo-trace.html" class="menu-item"> //[ ECHO TRACE ]</a>
-  <a href="Etr_Scripture.html" class="menu-item"> //[ ETR.SCRIPTURE ]</a>
-  <a href="#" class="menu-item"> //[ FRAGMENTED ]</a>
-
-  <p><span class="cursor">_</span></p>
+  <canvas id="visualizer"></canvas>
 </div>
 
 <script>
-  // MATRIX RAIN
-  const matrixCanvas = document.getElementById('matrixCanvas');
-  const matrixCtx = matrixCanvas.getContext('2d');
+// --- Purple Katakana Code Rain Setup ---
+const katakana = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズヅブプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッン';
 
+const matrixCanvas = document.getElementById('matrix');
+const matrixCtx = matrixCanvas.getContext('2d');
+
+function resizeCanvas() {
   matrixCanvas.width = window.innerWidth;
   matrixCanvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
 
-  const fontSize = 20;
-  const columns = Math.floor(matrixCanvas.width / fontSize);
-  const drops = Array(columns).fill(1);
+const fontSize = 16;
+const columns = Math.floor(matrixCanvas.width / fontSize);
+const drops = new Array(columns).fill(0);
 
-  function drawMatrix() {
-    matrixCtx.fillStyle = "rgba(0, 0, 0, 0.05)";
-    matrixCtx.fillRect(0, 0, matrixCanvas.width, matrixCanvas.height);
-    matrixCtx.fillStyle = "#b36eff";
-    matrixCtx.font = fontSize + "px VCR"; // <-- use VCR font
+function drawMatrix() {
+  matrixCtx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+  matrixCtx.fillRect(0, 0, matrixCanvas.width, matrixCanvas.height);
 
-    for (let i = 0; i < drops.length; i++) {
-      const char = Math.floor(Math.random() * 10);
-      matrixCtx.fillText(char, i * fontSize, drops[i] * fontSize);
-      if (drops[i] * fontSize > matrixCanvas.height && Math.random() > 0.975) {
-        drops[i] = 0;
-      }
-      drops[i]++;
+  matrixCtx.fillStyle = '#b36eff';
+  matrixCtx.font = fontSize + "px VT323";
+
+  for (let i = 0; i < columns; i++) {
+    const char = katakana.charAt(Math.floor(Math.random() * katakana.length));
+    matrixCtx.fillText(char, i * fontSize, drops[i] * fontSize);
+
+    if (drops[i] * fontSize > matrixCanvas.height && Math.random() > 0.975) {
+      drops[i] = 0;
     }
+    drops[i]++;
   }
+}
+setInterval(drawMatrix, 33);
 
-  setInterval(drawMatrix, 50);
 
-  window.addEventListener('resize', () => {
-    matrixCanvas.width = window.innerWidth;
-    matrixCanvas.height = window.innerHeight;
-    glitchCanvas.width = window.innerWidth;
-    glitchCanvas.height = window.innerHeight;
-  });
+// --- Lyrics data: [timestamp_in_seconds, lyric_line]
+const lyricsData = [
+  [22.74, "It's been a week since I seen your name come up on my phone"],
+  [26.60, "You're lucky I get lonely, or I'd leave you all alone"],
+  [30.36, "You're my highest high and you're my lowest low"],
+  [33.77, "I need you like just like heroin, I want you in my bones"],
+  [37.02, "I hate myself more than you know"],
+  [40.58, "You know"],
+  [41.55, "I had to let you go"],
+  [44.31, "The only time you love me's when the lights out"],
+  [48.03, "Callin' me your hero when you're facedown"],
+  [51.61, "Kissin' on my neck you had me on a cloud"],
+  [54.37, "But now I can see"],
+  [55.69, "Now I can see"],
+  [56.89, "Your love is so shallow"],
+  [58.69, "Shallow"],
+  [59.42, "Your love is so shallow"],
+  [61.23, "I try to let you go"],
+  [62.78, "But you hit me with your arrow"],
+  [64.95, "Shallow, shallow"],
+  [66.64, "Your love is so shallow"],
+  [68.40, "It's time to cut you off"],
+  [70.00, "And leave you in the shadows"],
+  [74.19, ""],
+  [87.22, "I love how you torture me until the end"],
+  [90.78, "Touch me one more time so I can just forget"],
+  [94.35, "All the lies and games you play inside my head"],
+  [97.62, "Don't look me in the eyes so I can just pretend"],
+  [101.01, "I hate myself more than you know"],
+  [104.52, "The more I think the more hate grows"],
+  [108.19, "I hate myself more than you know"],
+  [111.87, "You know"],
+  [112.65, "I had to let you go"],
+  [115.24, "Shallow, shallow"],
+  [116.31, "Your love is so shallow"],
+  [118.25, "It's time to cut you off"],
+  [119.70, "And leave you in the shadows"],
+  [122.68, "The only time you love me's when the lights out"],
+  [126.36, "Callin' me your hero when you're facedown"],
+  [129.98, "Kissin' on my neck you had me on a cloud"],
+  [132.45, "But now I can see"],
+  [133.89, "Now I can see"],
+  [135.12, "Your love is so shallow"],
+  [136.86, "Shallow"],
+  [137.76, "Your love is so shallow"],
+  [139.51, "I try to let you go"],
+  [141.05, "But you hit me with your arrow"],
+  [143.15, "Shallow, shallow"],
+  [144.83, "Your love is so shallow"],
+  [146.69, "It's time to cut you off"],
+  [148.25, "And leave you in the shadows"],
+  [152.44, ""],
+  [156.69, "You are"],
+  [159.92, "Shallow"],
+  [163.74, "You are"],
+  [167.28, "Shallow"],
+  [170.85, "You are"],
+  [174.13, "Shallow"],
+  [179.53, "The only time you love me's when the lights out"],
+  [183.28, "Callin' me your hero when you're facedown"],
+  [186.75, "Kissin' on my neck you had me on a cloud"],
+  [189.35, "But now I can see"],
+  [190.77, "Now I can see"],
+  [191.92, "Your love is so shallow"],
+  [193.71, "Shallow"],
+  [194.61, "Your love is so shallow"],
+  [196.34, "I try to let you go"],
+  [197.96, "But you hit me with your arrow"],
+  [200.02, "Shallow, shallow"],
+  [201.72, "Your love is so shallow"],
+  [203.53, "It's time to cut you off"],
+  [205.11, "And leave you in the shadows"],
+];
 
-  // GLITCH EFFECT
-  const glitchCanvas = document.getElementById('glitchCanvas');
-  const glitchCtx = glitchCanvas.getContext('2d');
+const lyricsBox = document.getElementById('lyrics');
+let currentLine = 0;
+let isTyping = false;
+let startTimestamp = null;
 
-  glitchCanvas.width = window.innerWidth;
-  glitchCanvas.height = window.innerHeight;
+function wait(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
 
-  function drawGlitch() {
-    glitchCtx.clearRect(0, 0, glitchCanvas.width, glitchCanvas.height);
-    if (Math.random() > 0.9) { // 10% chance to glitch each frame
-      const sliceHeight = Math.random() * 20 + 5;
-      const y = Math.random() * glitchCanvas.height;
-      const sliceWidth = glitchCanvas.width;
-      const imageData = matrixCtx.getImageData(0, y, sliceWidth, sliceHeight);
-      const offset = Math.random() * 40 - 20; // shift left/right
-      glitchCtx.putImageData(imageData, offset, y);
-    }
-    requestAnimationFrame(drawGlitch);
+async function typeLine(line) {
+  lyricsBox.innerHTML = '';
+
+  const isShallow = line.trim() === "Shallow";
+
+  const span = document.createElement('span');
+  span.className = 'typewriter';
+  if (isShallow) {
+    span.classList.add('bold');
   }
+  lyricsBox.appendChild(span);
 
-  drawGlitch();
+  // Typing speed 20ms per char
+  for (let i = 0; i <= line.length; i++) {
+    span.textContent = line.slice(0, i);
+    await wait(20);
+  }
+}
+
+async function processLyrics(timestamp) {
+  if (!startTimestamp) startTimestamp = timestamp;
+  const elapsedSeconds = (timestamp - startTimestamp) / 1000;
+
+  if (currentLine >= lyricsData.length) return; // done
+
+  if (!isTyping && elapsedSeconds >= lyricsData[currentLine][0]) {
+    isTyping = true;
+    await typeLine(lyricsData[currentLine][1] || '');
+    currentLine++;
+    isTyping = false;
+  }
+  requestAnimationFrame(processLyrics);
+}
+
+window.onload = () => {
+  requestAnimationFrame(processLyrics);
+};
+
+// --- Audio Visualizer ---
+const audio = document.getElementById('audio-player');
+const visCanvas = document.getElementById('visualizer');
+const visCtx = visCanvas.getContext('2d');
+
+function resizeVisualizer() {
+  visCanvas.width = visCanvas.clientWidth;
+  visCanvas.height = visCanvas.clientHeight;
+}
+window.addEventListener('resize', resizeVisualizer);
+resizeVisualizer();
+
+let audioCtx, analyser, source, dataArray, bufferLength;
+
+audio.addEventListener('play', () => {
+  if (!audioCtx) {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    analyser = audioCtx.createAnalyser();
+    source = audioCtx.createMediaElementSource(audio);
+    source.connect(analyser);
+    analyser.connect(audioCtx.destination);
+    analyser.fftSize = 256;
+    bufferLength = analyser.frequencyBinCount;
+    dataArray = new Uint8Array(bufferLength);
+  }
+  if (audioCtx.state === 'suspended') {
+    audioCtx.resume();
+  }
+  visualize();
+});
+
+function visualize() {
+  if (!analyser) return;
+  requestAnimationFrame(visualize);
+  analyser.getByteFrequencyData(dataArray);
+
+  visCtx.fillStyle = '#10001a';
+  visCtx.fillRect(0, 0, visCanvas.width, visCanvas.height);
+
+  const barWidth = (visCanvas.width / bufferLength) * 2.5;
+  let barHeight;
+  let x = 0;
+
+  for(let i = 0; i < bufferLength; i++) {
+    barHeight = dataArray[i];
+    const r = 179;  // #b36eff rgb
+    const g = 110;
+    const b = 255;
+
+    visCtx.fillStyle = `rgb(${r},${g},${b})`;
+    visCtx.fillRect(x, visCanvas.height - barHeight / 2, barWidth, barHeight / 2);
+    x += barWidth + 1;
+  }
+}
 </script>
+
 </body>
 </html>
