@@ -26,8 +26,6 @@
     overflow: hidden;
     position: relative;
   }
-</style>
-
 
   canvas {
     position: fixed;
@@ -172,7 +170,7 @@
     matrixCtx.fillStyle = "rgba(0, 0, 0, 0.05)";
     matrixCtx.fillRect(0, 0, matrixCanvas.width, matrixCanvas.height);
     matrixCtx.fillStyle = "#b36eff";
-    matrixCtx.font = fontSize + "px VT323";
+    matrixCtx.font = fontSize + "px VCR"; // <-- use VCR font
 
     for (let i = 0; i < drops.length; i++) {
       const char = Math.floor(Math.random() * 10);
